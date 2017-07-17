@@ -14,7 +14,7 @@ var circle_drag = -1;
 
 var lastX;
 var lastY;
-
+var drag_index = -1;
 //event handler for click
 $("#canvas").mousedown(function(e) {
     getPosition(e);
@@ -125,7 +125,7 @@ function getPosition(event) {
             is_down = true;
 
             circle_drag = points[i];
-
+            drag_index = i;
             UpdatePointsList();
             //redrawAll();
             break;
@@ -160,7 +160,7 @@ function doubleClick(e) {
             //only updates description if the task hasn't already been described
             points[i].update();
             UpdatePointsList();
-            //redrawAll();
+            redrawAll();
             break;
             // console.log("PAST THE BREAK!!!!!!!!!!!!!!!!!");
         }
@@ -310,8 +310,8 @@ function triggerModal(cx, cy) {
         drag_update: function(cx, cy) {
             this.x = cx;
             this.y = cy;
-            this.display_x = prettify_x(cx);
-            this.display_y = prettify_y(cy);
+            this.display_x = Math.floor(prettify_x(cx));
+            this.display_y = Math.floor(-prettify_y(cy));
         },
         update: function() {
 
@@ -459,12 +459,14 @@ function drawPoint(point) {
     //var ctx = document.getElementById("canvas").getContext("2d");
 
     context.fillStyle = "#ee3124"; // Red color
-
+    context.strokeStyle = "#000";
     context.beginPath();
     context.arc(point.x, point.y, point.yrs * point_size_scale, 0, Math.PI * 2, true);
+
     // context.shadowBlur=10;
     //context.shadowColor="black";
     context.fill();
+    context.stroke();
     var pad = point.yrs * 2;
     context.beginPath();
     context.font = "16px Arial";
@@ -601,6 +603,7 @@ function handleMouseMove(e) {
 
     circle_drag.x += dx;
     circle_drag.y += dy;
+    points[drag_index].drag_update(circle_drag.x,circle_drag.y);
     redrawAll();
 
 
@@ -615,7 +618,9 @@ $("#canvas").mousemove(function(e) {
 $("#canvas").mouseout(function (e) {
     handleMouseUp(e);
 });
-
+$("#canvas").dblclick(function(e){
+    doubleClick(e);
+});
 /*
 //space bar pressed
 $(window).keypress(function(e) {
