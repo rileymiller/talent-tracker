@@ -8,11 +8,18 @@ var points = [];
 var point_size_scale = 10;
 //var horizontal_rescale = .4;
 //var vertical_rescale = .4;
+var is_down = false;
+
+var circle_drag = -1;
+
+var lastX;
+var lastY;
 
 //event handler for click
-$("#canvas").click(function(e) {
+$("#canvas").mousedown(function(e) {
     getPosition(e);
 });
+
 
 //draws board
 function drawBoard() {
@@ -91,17 +98,53 @@ function promptExperience() {
 
 }
 
-
-
-
-
-
-
 var point_count = 0; //count of points
 
 
 //gets position of click
 function getPosition(event) {
+    // tell the browser we'll handle this event
+    event.preventDefault();
+    event.stopPropagation();
+    var rect = canvas.getBoundingClientRect(); //bounded rectangle
+    var cx = parseInt(event.clientX - rect.left); //x-value
+    var cy = parseInt(event.clientY - rect.top); //y-value
+
+    lastX = cx;
+    lastY=cy;
+    console.log("getPosition x: " + cx + " y :" + cy); //prints canvas x/y
+
+    var point_clicked = false;
+
+    for (var i = 0; i < points.length; i++) {
+        point_clicked = intersect(cx, cy, points[i]);
+        points[i].update_click();
+        if (point_clicked) {
+            console.log("point was clicked");
+            //only updates description if the task hasn't already been described
+            is_down = true;
+
+            circle_drag = points[i];
+
+            UpdatePointsList();
+            //redrawAll();
+            break;
+            // console.log("PAST THE BREAK!!!!!!!!!!!!!!!!!");
+        }
+    }
+
+
+    if (!point_clicked) {
+        createPoint(cx, cy);
+    }
+}
+/************************NEED TO UPDATE*******************************
+//this function is going to be used to update a point upon a double click
+**********************************************************************/
+function doubleClick(e) {
+    // tell the browser we'll handle this event
+    e.preventDefault();
+    e.stopPropagation();
     var rect = canvas.getBoundingClientRect(); //bounded rectangle
     var cx = event.clientX - rect.left; //x-value
     var cy = event.clientY - rect.top; //y-value
@@ -115,7 +158,6 @@ function getPosition(event) {
         if (point_clicked) {
             console.log("point was clicked");
             //only updates description if the task hasn't already been described
-
             points[i].update();
             UpdatePointsList();
             //redrawAll();
@@ -123,12 +165,41 @@ function getPosition(event) {
             // console.log("PAST THE BREAK!!!!!!!!!!!!!!!!!");
         }
     }
-
-
-    if (!point_clicked) {
-        createPoint(cx, cy);
-    }
 }
+
+//gets position of drag
+/*
+function drag(event) {
+    var rect = canvas.getBoundingClientRect(); //bounded rectangle
+    var cx = event.clientX - rect.left; //x-value
+    var cy = event.clientY - rect.top; //y-value
+    console.log("getDragPosition x: " + cx + " y :" + cy); //prints canvas x/y
+
+    var dragging = false;
+
+    for (var i = 0; i < points.length; i++) {
+        dragging = intersect(cx, cy, points[i]);
+        // points[i].update_click();
+        if (dragging) {
+            console.log("point dragging");
+            //only updates description if the task hasn't already been described
+            $("#canvas").mouseup(function(e) {
+                cx =event.clientX - rect.left;
+                cy = event.clientY - rect.top;
+                console.log("Mouse up coordinates: " + cx + ", " + cy);
+            });
+
+            points[i].drag_update();
+
+
+            UpdatePointsList();
+            //redrawAll();
+            break;
+            // console.log("PAST THE BREAK!!!!!!!!!!!!!!!!!");
+        }
+    }
+}*/
+
 
 function intersect(cx, cy, point) {
     // point.print();
@@ -157,10 +228,21 @@ function createPoint(cx, cy) {
 
 }
 
+function prettify_x(cx) {
+    console.log("Inside prettify_x");
+    var pretty_x;
+    return pretty_x = cx * ((200) / width) + -100;
+}
+
+function prettify_y(cy) {
+    console.log("inside prettify_y");
+    var pretty_y;
+    return pretty_y = cy * ((200) / height) + -100;
+
+}
 
 function triggerModal(cx, cy) {
-    var pretty_x = cx * ((200) / width) + -100;
-    var pretty_y = cy * ((200) / height) + -100;
+
 
     // promptExperience();
     // var num = document.getElementById("yearsExperienceInput").innerHTML.text();
@@ -173,10 +255,10 @@ function triggerModal(cx, cy) {
 
         x: cx,
         y: cy,
-        display_x: Math.floor(pretty_x),
-        display_y: Math.floor(-pretty_y),
+        display_x: Math.floor(prettify_x(cx)),
+        display_y: Math.floor(-prettify_y(cy)),
         yrs: 0,
-        number: point_count,
+        code: "",
         skill: "",
         description: "",
         print: function() {
@@ -225,7 +307,15 @@ function triggerModal(cx, cy) {
                 return false;
             }
         },
+        drag_update: function(cx, cy) {
+            this.x = cx;
+            this.y = cy;
+            this.display_x = prettify_x(cx);
+            this.display_y = prettify_y(cy);
+        },
         update: function() {
+
+            var code_input = prompt("Enter skill code:");
             var skill_input = prompt("What is this skill");
 
 
@@ -245,7 +335,7 @@ function triggerModal(cx, cy) {
 
 
 
-
+            this.code = code_input;
             this.skill = skill_input;
             this.yrs = yearsExperienceInput;
             this.description = descriptionInput;
@@ -346,7 +436,7 @@ function triggerModal(cx, cy) {
 }
 
 function lastNewPointDisplay(point) {
-    document.getElementById('point_display').innerHTML = "Point Number: " + point.number + "  X: " + Math.floor(point.display_x) + "  Y: " +
+    document.getElementById('point_display').innerHTML = "Code: " + point.code + "  X: " + Math.floor(point.display_x) + "  Y: " +
         Math.floor(point.display_y) + " Skill: " + point.skill + " Years of Experience: " + point.yrs + " Description: " + point.description;
 }
 
@@ -358,7 +448,7 @@ function UpdatePointsList() {
 
     display.innerHTML = "";
     for (var i = 0; i < points.length; i++) {
-        display.innerHTML += "Point Number: " + points[i].number + "  X: " + Math.floor(points[i].display_x) +
+        display.innerHTML += "Code: " + points[i].code + "  X: " + Math.floor(points[i].display_x) +
             "  Y: " + Math.floor(points[i].display_y) + " Skill: " + points[i].skill +
             " Years of Experience: " + points[i].yrs + " Description: " + points[i].description + "<br />";
     }
@@ -381,13 +471,14 @@ function drawPoint(point) {
     context.fillStyle = "black";
     context.textAlign = "center";
     context.textBaseline = "middle";
-    context.fillText(point.number, point.x, point.y);
+    context.fillText(point.code, point.x, point.y);
     context.fill();
 }
 
 
 //need to feed function proper x & y coordinates from mouse event handler
 canvas.onmousemove = function mouseMove(e) {
+    //if (points.length == 0) return;
     var rect = canvas.getBoundingClientRect(); //bounded rectangle
     var x = event.clientX - rect.left; //x-value
     var y = event.clientY - rect.top; //y-value
@@ -402,6 +493,10 @@ canvas.onmousemove = function mouseMove(e) {
 
 //this function checks to see if the mouse is hovering over a point
 function checkHover(e) {
+    // tell the browser we'll handle this event
+    e.preventDefault();
+    e.stopPropagation();
+    if(points.length == 0) return;
     var rect = canvas.getBoundingClientRect(); //bounded rectangle
     var x = event.clientX - rect.left; //x-value
     var y = event.clientY - rect.top; //y-value
@@ -417,7 +512,7 @@ function checkHover(e) {
             break;
         }
         if (points[i].displayed() && !hover) {
-            redrawAll();
+         //   redrawAll();
             points[i].updateDisplay();
             turnOffDescription();
         }
@@ -432,7 +527,7 @@ function turnOffDescription() {
 function displayDescription(x, y, point) {
     var description = document.getElementById("description");
     var view_threshold
-    document.getElementById("description_title").innerHTML = point.number + ": " + point.skill;
+    document.getElementById("description_title").innerHTML = point.code + ": " + point.skill;
     document.getElementById("description_exp").innerHTML = "Years Experience: " + point.yrs;
     document.getElementById("description_text").innerHTML = "Description: " + point.description;
     description.style.display = "block";
@@ -474,6 +569,53 @@ function clear() {
     document.getElementById('point_display').innerHTML = "Point Number: 0" + " X: 0" + " Y: 0";
 
 }
+
+function handleMouseUp(e) {
+    // tell the browser we'll handle this event
+    e.preventDefault();
+    e.stopPropagation();
+    console.log("DONE DRAGGING");
+    // stop the drag
+    is_down = false;
+    console.log(points);
+}
+
+function handleMouseMove(e) {
+    if (!is_down) {
+        return;
+    }
+    turnOffDescription();
+    // tell the browser we'll handle this event
+    e.preventDefault();
+    e.stopPropagation();
+
+    var rect = canvas.getBoundingClientRect(); //bounded rectangle
+    var cx = parseInt(event.clientX - rect.left); //x-value
+    var cy = parseInt(event.clientY - rect.top); //y-value
+
+    var dx = cx - lastX;
+    var dy = cy - lastY;
+
+    lastX = cx;
+    lastY = cy;
+
+    circle_drag.x += dx;
+    circle_drag.y += dy;
+    redrawAll();
+
+
+}
+
+$("#canvas").mouseup(function(e) {
+    handleMouseUp(e);
+});
+$("#canvas").mousemove(function(e) {
+    handleMouseMove(e);
+});
+$("#canvas").mouseout(function (e) {
+    handleMouseUp(e);
+});
+
 /*
 //space bar pressed
 $(window).keypress(function(e) {
