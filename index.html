@@ -2,128 +2,18 @@
 <html>
 
 <head>
-    <title>talent tool</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.min.js"></script>
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="draw.css">
+    <meta charset="utf-8">
+    <title>Graph editor</title>
+    <link type="text/css" href="index.css" rel="stylesheet" />
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mousetrap/1.4.6/mousetrap.js" charset="utf-8"></script>
+</head>
+<script src="index.js"></script>
 </head>
 
-<body>
-    <h2>Talent Tracker  </h2>
-    <p> Click on the grid to create a point on the grid
-        <br>Double click to edit point
-        <br>Drag point after creation to move it to a new spot.
-    </p>
-    <!-- Trigger the modal with a button -->
-    <!-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>-->
-    <!-- Modal -->
-    <div id="myModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Create/Edit Point</h4>
-                </div>
-                <div class="modal-body">
-                    <!-- <form name="point_data" data-toggle="validator">
-                        <div class="hiddenSkill">
-                            <div class="form-group">
-                                <label for="newSkill">New Skill</label>
-                                <input type="text" class="form-control" id="newSkill" placeholder="Time Management">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="yearsExperienceInput">Years Experience</label>
-                            <input type="number"  class="form-control" id="yearsExperienceInput" placeholder="4">
-                        </div>
-                        <div class="form-group">
-                            <label for="descriptionInput">Description</label>
-                            <textarea class="form-control" rows="5" id="descriptionInput"></textarea>
-                        </div>
-                    </form>
-                    -->
-                    <form data-toggle="validator" id="myForm" role="form">
-                        <div class="form-group">
-                            <label for="skills">Skills</label>
-                            <select class="form-control" id="skills" title="skills" required>
-                                <option>HTML</option>
-                                <option>JS</option>
-                                <option>C++</option>
-                                <option>Hooblah</option>
-                            </select>
-                        </div>
-
-
-                        <div class="form-group">
-                            <label for="yearsExperienceInput">Years Experience</label>
-                            <input type="number" class="form-control" id="yearsExperienceInput" placeholder="4" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="descriptionInput">Description</label>
-                            <textarea class="form-control" rows="5" id="descriptionInput"></textarea>
-                        </div>
-
-                        <!--
-                        <div class="form-group has-feedback">
-                            <label for="inputTwitter" class="control-label">Twitter</label>
-                            <div class="input-group">
-                                <span class="input-group-addon">@</span>
-                                <input type="text" pattern="^[_A-z0-9]{1,}$" maxlength="15" class="form-control" id="inputTwitter" placeholder="1000hz" required>
-                            </div>
-                            <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
-                            <div class="help-block with-errors">Hey look, this one has feedback icons!</div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputEmail" class="control-label">Email</label>
-                            <input type="email" class="form-control" id="inputEmail" placeholder="Email" data-error="Bruh, that email address is invalid" required>
-                            <div class="help-block with-errors"></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputPassword" class="control-label">Password</label>
-                            <div class="form-inline row">
-                                <div class="form-group col-sm-6">
-                                    <input type="password" data-minlength="6" class="form-control" id="inputPassword" placeholder="Password" required>
-                                    <div class="help-block">Minimum of 6 characters</div>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    <input type="password" class="form-control" id="inputPasswordConfirm" data-match="#inputPassword" data-match-error="Whoops, these don't match" placeholder="Confirm" required>
-                                    <div class="help-block with-errors"></div>
-                                </div>
-                            </div>
-                        </div>-->
-                        <div class="form-group">
-                            <button type="button" id="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <!-- <button type="button" class="btn btn-primary" data-dismiss="modal">Save Changes</button> -->
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id='description'>
-        <h2 class='title' id="description_title">Task..[insert here]</h2>
-        <p id="description_exp"></p>
-        <p id="description_text">[insert description here]</p>
-    </div>
-    <canvas id="canvas" width="690" height="651"></canvas>
-    <p id="coordinates"></p>
-    <h3 id="point_display"></h3>
-    <p id="points_display"></p>
-    <p>One idea is to make the point size relative to age
-        <br> Also need to make sure circles can't go off the canvas
-    </p>
-    <script src="draw.js"></script>
+<body onload="main()">
+    <svg class="frame" width="960" height="500">
+    </svg>
 </body>
 
 </html>
