@@ -3,22 +3,30 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Graph editor</title>
+    <title>Corner Tool</title>
     <link type="text/css" href="index.css" rel="stylesheet" />
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mousetrap/1.4.6/mousetrap.js" charset="utf-8"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://use.fontawesome.com/6b437719c8.js"></script>
 </head>
 
 <body onload="main()">
     <header>
-        <h1>Talent Tracker</h1>
+        <h1>Corner Tool</h1>
     </header>
     <section>
-        <svg class="frame" width="960" height="500">
+        <svg class="frame" width="760" height="760">
         </svg>
+        <div id="skill_menu">
+            <div class="skill_row">
+                <div id="skill_title">
+                    <h2>Skills</h2>
+                </div>
+            </div>
+        </div>
         <div id="prompt" class="modal fade" role="dialog">
             <div class="modal-dialog">
                 <!-- Modal content-->

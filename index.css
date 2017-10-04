@@ -1,16 +1,93 @@
+div#skill_menu {
+    display: table;
+    border-collapse: collapse;
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    width: 25%;
+    text-align: center;
+}
 
+
+div.skill_row {
+    display: table-row;
+}
+
+div#skill_title {
+    display: table-cell;
+    border: 2px solid black;
+}
+
+div.desc_rowD {
+    display: none;
+}
+
+div.desc_rowA {
+    display: table-row;
+}
+
+
+
+/*
+div.skill_descD {
+	display: none;
+}
+*/
+
+div#skill_menu div[id^="skill_number"] {
+    font-size: 18px;
+    display: table-cell;
+    border: 2px solid black;
+    text-align: left;
+    padding-left: 15px;
+    width: 100%;
+    margin: 10px;
+}
+
+div#skill_menu div[id^="skill_number"] p {
+	display: inline;
+}
+div#skill_menu div[id^="skill_number"] i {
+	text-align: right;
+
+}
+
+div#skill_menu div[id^="description"] {
+    font-size: 14px;
+    display: table-cell;
+    border: 1px solid black;
+    text-align: left;
+    padding-left: 15px;
+    width: 100%;
+    margin: 10px;
+    background-color: #43d9a6;
+}
+
+
+/*
+div#skill_menu div[id^="skill_number"]:hover {
+	cursor: pointer;
+	border-color: #43d9a6;
+	border-style: double;
+}*/
+
+div[id^="skill_number"] p {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
 
 .frame {
-	border: 2px solid black;
+    border: 2px solid black;
 }
 
 .background {
-	fill: transparent;
+    fill: transparent;
+    margin-left: 100px;
 }
 
 .active {
-  stroke: #000;
-  stroke-width: 2px;
+    stroke: #000;
+    stroke-width: 2px;
 }
 
 .modal-body .form-horizontal .col-sm-2,
@@ -21,19 +98,20 @@
 .modal-body .form-horizontal .control-label {
     text-align: left;
 }
+
 .modal-body .form-horizontal .col-sm-offset-2 {
     margin-left: 15px;
 }
 
 form {
-	margin: 15px;
+    margin: 15px;
 }
 
 .spot {
-	stroke: #696969;
-	stroke-width: 1px;
+    stroke: #696969;
+    stroke-width: 1px;
 }
 
 .start {
-	stroke: #000;
+    stroke: #000;
 }

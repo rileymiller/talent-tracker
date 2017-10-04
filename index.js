@@ -26,7 +26,7 @@ var p;
                 }
             }
         }
-        
+
         var drag = d3.behavior.drag()
             .origin(function(d) { return d; })
             .on("dragstart", dragstarted)
@@ -65,7 +65,7 @@ var p;
         background.on('click', function() {
             /* retrieve mouse coordinates
              */
-            
+
             p = d3.mouse(this);
             console.log('background clicked')
             console.log('these are the coordinates of p at this point in the function');
@@ -78,37 +78,86 @@ var p;
 
 
             d3.event.stopPropagation();
-           
+
         });
+
         $('#submit').click(function(e) {
-                // console.log('#submit clicked');
-                //need to capture this data
-                //console.log('submit handled');
-                e.preventDefault();
-                var yrs = $('#number-input').val();
-                //  console.log(yrs);
-                var skills = $('#skillSelect').val();
-                //  console.log(skills);
-                var description = $('#exampleTextarea').val();
-                //console.log(description);
-                var color = $('#colorSelect').val();
-                // console.log(color)
-                if (point_count === points.length) {
-                    console.log('POINT COUNT = POINTS.LENGTH');
+            // console.log('#submit clicked');
+            //need to capture this data
+            //console.log('submit handled');
+            e.preventDefault();
+            var yrs = $('#number-input').val();
+            //  console.log(yrs);
+            var skills = $('#skillSelect').val();
+            //  console.log(skills);
+            var description = $('#exampleTextarea').val();
+            //console.log(description);
+            var color = $('#colorSelect').val();
+            // console.log(color)
+            if (point_count === points.length) {
+                console.log('POINT COUNT = POINTS.LENGTH');
 
-                     point_count++;
-                     console.log('point count after increment: ' + point_count);
-                    newPoint(p, yrs, skills, description, color);
-                }
+                point_count++;
+                console.log('point count after increment: ' + point_count);
+                newPoint(p, yrs, skills, description, color);
+            }
 
-               
-            });
+
+        });
+        /*
+                    $(document).on({
+                            mouseenter: function() {
+                                console.log('skill box being hovered');
+                                $(this).css('cursor', 'pointer').css('border-color', '#43d9a6').css('border-style', 'double');
+                            },
+                            mouseleave: function() {
+                                console.log('hover finished');
+                                $(this).css('cursor', 'arrow').css('border-color', 'black').css('border-style', 'double');
+                            }
+                        });*/
+
+        $(document).on("mouseenter", "[id^=skill_number]", function() {
+            $(this).css('cursor', 'pointer').css('border-color', '#43d9a6').css('border-style', 'double');
+        });
+
+        $(document).on("mouseleave", "[id^=skill_number]", function() {
+            $(this).css('cursor', 'arrow').css('border-color', 'black').css('border-style', 'solid');
+        });
+
+        $(document).on("click", "[id^=skill_number]", function() {
+            console.log('skill clicked');
+            var id = $(this).attr('id');
+            console.log(id);
+            var point_num = id.substr(id.length - 1, 1);
+            console.log(point_num);
+            show_description(id, point_num);
+            
+        })
+
+        function show_description(id, point_num) {
+            console.log('show_description called');
+            console.log('drow' + point_num);
+            $('#drow' + point_num).toggleClass('desc_rowD desc_rowA');
+           // highlightNode(id, point_num);
+            var node = d3.select('#node-' + (point_num - 1));
+            var class_ = node.attr('class');
+            if(class_ === 'spot'){
+                node.attr('class',function(d){ return 'active'});
+            }
+
+            if(class_ === 'active'){
+                node.attr('class',function(d){ return 'spot'});
+            }
+        }
+
+
+
         function newPoint(p, years, skills, description, color) {
-           
+
             var point = {
                 x: p[0],
                 y: p[1],
-                radius: years,
+                radius: 2,
                 color: color,
                 count: point_count,
                 id: 'node' + point_count,
@@ -119,7 +168,7 @@ var p;
             };
             // console.log(p);
             points.push(point);
-            
+
             //console.log(points);
             var node = vis.selectAll('g')
                 .data(points)
@@ -145,12 +194,24 @@ var p;
                 .attr("y", function(d) { return d.y + d.radius / 2; })
                 .attr("text-anchor", "start")
                 .style("fill", "black")
-                .text(function(d) { return d.id; });
+                .text(function(d) { return d.count; });
 
+            addSkill(point);
+            addDescription(point);
             // console.log(text.data());
+        }
+
+        function addSkill(point) {
+            $('#skill_menu').append('<div class=\"skill_row\" ><div id=\"skill_number' + point.count + "\"><i class=\"fa fa-plus-square\" aria-hidden=\"true\"></i>" +
+                "<p> Skill " + point.count + ': ' + point.skills + "</p></div></div><div class=\"desc_rowD\" id=\"drow" +
+                point.count + "\" ><div id=\"description" + point.count +
+                "\" class=\"skill_descD\"></div>" + "</div>");
+        }
+
+        function addDescription(point) {
+            $('#description' + point.count).append('<p>' + point.description + '</p>');
         }
 
     };
 
 }).call(this);
-
