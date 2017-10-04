@@ -12,3 +12,28 @@
   stroke: #000;
   stroke-width: 2px;
 }
+
+.modal-body .form-horizontal .col-sm-2,
+.modal-body .form-horizontal .col-sm-10 {
+    width: 100%
+}
+
+.modal-body .form-horizontal .control-label {
+    text-align: left;
+}
+.modal-body .form-horizontal .col-sm-offset-2 {
+    margin-left: 15px;
+}
+
+form {
+	margin: 15px;
+}
+
+.spot {
+	stroke: #696969;
+	stroke-width: 1px;
+}
+
+.start {
+	stroke: #000;
+}

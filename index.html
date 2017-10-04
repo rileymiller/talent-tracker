@@ -7,13 +7,71 @@
     <link type="text/css" href="index.css" rel="stylesheet" />
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mousetrap/1.4.6/mousetrap.js" charset="utf-8"></script>
-</head>
-<script src="index.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
 <body onload="main()">
-    <svg class="frame" width="960" height="500">
-    </svg>
+    <header>
+        <h1>Talent Tracker</h1>
+    </header>
+    <section>
+        <svg class="frame" width="960" height="500">
+        </svg>
+        <div id="prompt" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Update Point</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form" id="point-modal">
+                            <div class="form-group row">
+                                <label for="number-input" class="col-2 col-form-label">Years of experience</label>
+                                <div class="col-10">
+                                    <input class="form-control" type="number" value="2" id="number-input">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="skillSelect">Skills</label>
+                                <select class="form-control" id="skillSelect">
+                                    <option>data analytics</option>
+                                    <option>software development</option>
+                                    <option>web styling</option>
+                                    <option>blueberry yum yum</option>
+                                    <option>taco twelve pack</option>
+                                </select>
+                            </div>
+                            <div class="form-group row">
+                                <label for="colorSelect">Colors</label>
+                                <select class="form-control" id="colorSelect">
+                                    <option>#43d9a6</option>
+                                    <option>#519138</option>
+                                    <option>#fc9c4c</option>
+                                    <option>#b024ae</option>
+                                    <option>#6e79fd</option>
+                                </select>
+                            </div>
+                            <div class="form-group row">
+                                <label for="descriptionTextarea">Description</label>
+                                <textarea class="form-control" id="exampleTextarea" rows="3"></textarea>
+                            </div>
+                            <button type="submit" id="submit" class="btn btn-default" data-dismiss="modal">Just Gonna Send It!!</button>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="results_display"></div>
+    <footer>
+        <script src="index.js"></script>
+    </footer>
 </body>
 
 </html>
